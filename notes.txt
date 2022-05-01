@@ -1,0 +1,7 @@
+Middleware functions - functions that have access to the request and response object. Express has built in middleware but 3rd party packages can be added.
+
+Middleware always takes in a req, res and next. 
+    const middleware = (req, res, next)
+
+To initialise the middleware, call app.use() and pass in the middleware:
+    app.use(middleware)
