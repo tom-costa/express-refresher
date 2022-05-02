@@ -1,5 +1,8 @@
 const express = require('express')
 const path = require('path')
+const exphbs = require('express-handlebars')
+const members = require('./Members')
+
 const logger = require('./middleware/logger')
 
 const app = express()
@@ -7,10 +10,19 @@ const app = express()
 
 // Initialise middleware
 
+// Handlebars Middleware
+app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}))
+app.set('view engine', 'handlebars')
+
 // Body Parser middleware
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+// Homepage router
+app.get('/', (req, res)  => res.render('index', {
+    title: 'Member App',
+    members
+}))
 
 // Set static folder 
 // (better than setting up a route for each of the pages separetely):

@@ -34,7 +34,9 @@ router.post('/', (req, res) => {
     }
 
     members.push(newMember)
-    res.json(members)
+    // res.json(members)
+    // After adding the handlebars template engine, I set up the re-direct below so that it updates the rendered view instead of just showing the raw json. 
+    res.redirect('/')
 })
 
 // Update Member
@@ -45,11 +47,24 @@ router.put('/:id', (req, res) => {
         const updateMember = req.body
         members.forEach(member => {
             if (member.id === parseInt(req.params.id)){
-                members.name = updateMember.name ? updateMember.name : member.name
-                members.email = updateMember.email ? updateMember.email : member.email
+                member.name = updateMember.name ? updateMember.name : member.name
+                member.email = updateMember.email ? updateMember.email : member.email
 
                 res.json({msg: 'Member updated', member})
             }
+        })
+    } else {
+        res.status(400).json({msg: `Member ID ${req.params.id} does not exist`})
+    }
+}) 
+
+// Delete Member
+// Get single member:
+router.delete('/:id', (req, res) => {
+    const validMember = members.some(member => member.id === parseInt(req.params.id))
+    if (validMember){
+        res.json({
+            msg: 'Member deleted', members: members.filter(member => member.id === parseInt(req.params.id))
         })
     } else {
         res.status(400).json({msg: `Member ID ${req.params.id} does not exist`})
